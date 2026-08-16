@@ -10,8 +10,6 @@ local TARGETS = {
 local DELAY = 0
 local leaving = false
 
--- Ginagawang lowercase para kahit uppercase/mixed-case
--- ang nasa TARGETS, ma-detect pa rin
 local function normalize(name)
     return string.lower(tostring(name))
 end
@@ -33,11 +31,7 @@ local function isTarget(player)
 end
 
 local function checkPlayer(player)
-    if leaving then
-        return
-    end
-
-    if not isTarget(player) then
+    if leaving or not isTarget(player) then
         return
     end
 
@@ -45,17 +39,17 @@ local function checkPlayer(player)
 
     task.delay(DELAY, function()
         if LocalPlayer and LocalPlayer.Parent == Players then
-            LocalPlayer:Kick("System Error")
+            LocalPlayer:Kick("Please try again")
         end
     end)
 end
 
--- Check players na nasa server na
+-- Check players already in the server
 for _, player in ipairs(Players:GetPlayers()) do
     checkPlayer(player)
 end
 
--- Check bagong players na sasali
+-- Check players who join
 Players.PlayerAdded:Connect(function(player)
     checkPlayer(player)
 end)
